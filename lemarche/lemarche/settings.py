@@ -56,9 +56,7 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_ALLOWED_ORIGINS = [
-    'http://192.168.89.34:8000',
-]
+
 
 ROOT_URLCONF = 'lemarche.urls'
 
