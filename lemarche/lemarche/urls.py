@@ -16,8 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+import core.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('core/',include('core.urls'))
+    # path('core/',include('core.urls')),
+    path('products/<str:id>/',core.views.products),
+    path('category/',core.views.categories),
+    path('liked_products/<str:id>/',core.views.liked_products),
+    path('my_ads/<str:id>/',core.views.my_ads),
+    path('user/<str:id>/',core.views.my_acc),
 ]
