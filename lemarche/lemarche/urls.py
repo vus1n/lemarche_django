@@ -26,4 +26,5 @@ urlpatterns = [
     path('liked_products/<str:id>/',core.views.liked_products),
     path('my_ads/<str:id>/',core.views.my_ads),
     path('user/<str:id>/',core.views.my_acc),
+    path('hi/',core.views.hi_view),
 ]

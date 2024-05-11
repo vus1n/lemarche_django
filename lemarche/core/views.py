@@ -47,3 +47,7 @@ def my_acc(request,id):
     user = UserModel.objects.get(name=id)
     user_serializer = UserModelSerializer(user,many=True)
     return Response({"data":user_serializer.data})
+
+@api_view(['GET'])
+def hi_view(request):
+    return Response("hii")
