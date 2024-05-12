@@ -36,18 +36,41 @@ def list_liked_products(request,id):
     return Response({"data":data.data})
 
 
-#make it create_list_myads
-@api_view(['GET'])
+
+@api_view(['GET','POST'])
 def create_list_myads(request,id):
     user  = UserModel.objects.get(name=id)
-    products = Product.objects.filter(userId = user.userId)
-    data = ProductSerializer(products,many=True)
-    return Response({"data":data.data})
+    if request.method == 'GET':
+        products = Product.objects.filter(userId = user.userId)
+        data = ProductSerializer(products,many=True)
+        return Response({"data":data.data})
+    elif request.method == 'POST':
+        category = request.data['category']
+        category_model = Category.objects.get(categoryName = category)
+        title = request.data['title']
+        brand = request.data['brand']
+        imgUrl = request.data['img']
+        price = request.data['price']
+        ad = Product.objects.create(userId=user,categoryId=category_model,title=title,brand=brand,imgUrl=imgUrl,price=price)
+        ad.save()
+        ad_data = ProductSerializer(ad)
+        return Response(ad_data.data)
 
-#make it retreive_update_acc
-@api_view(['GET'])
+
+
+@api_view(['GET','PUT'])
 def retrieve_update_acc(request,id):
-    user = UserModel.objects.get(name=id)
-    user_serializer = UserModelSerializer(user,many=True)
-    return Response({"data":user_serializer.data})
-
+    if request.method == 'GET':
+        user = UserModel.objects.get(name=id)
+        user_serializer = UserModelSerializer(user)
+        return Response({"data":user_serializer.data})
+    elif request.method == 'PUT':
+        name = request.data['name']
+        email = request.data['email']
+        pic = request.data['pic']
+        contactNo = request.data['contact']
+        location = request.data['location']
+        user_model = UserModel.objects.update(name=name,email=email,pic=pic,contactNo=contactNo,location=location)
+       
+        user_serializer = UserModelSerializer(user_model)
+        return Response(user_serializer.data)

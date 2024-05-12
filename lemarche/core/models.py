@@ -4,7 +4,7 @@ import uuid
 
 class UserModel(models.Model):
     userId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email= models.CharField(max_length = 50)
+    email= models.CharField(max_length = 50 )
     name =models.CharField(max_length = 50)
     pic = models.TextField(max_length=200, null =True, blank =True)
     contactNo = models.IntegerField()
