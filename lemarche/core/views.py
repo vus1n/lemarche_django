@@ -5,7 +5,7 @@ from .serializers import CategorySerializer,ProductSerializer,UserModelSerialize
 
 @api_view(['GET'])
 def list_products(request,id):
-    if id != 'all':
+    if id != 'All':
         category = Category.objects.get(categoryName=id)
         products = Product.objects.filter(categoryId=category.categoryId)
         
