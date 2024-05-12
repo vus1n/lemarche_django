@@ -4,7 +4,7 @@
 echo "Building the project..."
 
 # Install Python dependencies from requirements.txt
-python3.9 pip install Django
+python3.9 -m pip install Django
 python3.9 -m pip install -r requirements.txt
 
 # Run Django migrations
