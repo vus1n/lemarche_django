@@ -84,8 +84,12 @@ WSGI_APPLICATION = 'lemarche.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'lemarche-db',
+        'USER': "default",
+        'PASSWORD': "h0vc5MyRGDnO",
+        'HOST': "ep-proud-night-a409g60i-pooler.us-east-1.aws.neon.tech",
+        'PORT': '5432',
     }
 }
 
