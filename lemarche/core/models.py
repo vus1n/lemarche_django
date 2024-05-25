@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 import uuid
 
 class UserModel(models.Model):
-    userId = models.IntegerField(primary_key=True,auto_created=True)
+    
     email= models.CharField(max_length = 50 )
     name =models.CharField(max_length = 50)
     pic = models.TextField(max_length=200, null =True, blank =True)
@@ -13,7 +13,7 @@ class UserModel(models.Model):
         return self.name
 
 class Category(models.Model):
-    categoryId =  models.IntegerField(primary_key=True,auto_created=True)
+    
     categoryName = models.CharField(max_length = 50)
     imgUrl =models.TextField(max_length=200, null =True, blank =True)
 
@@ -22,7 +22,7 @@ class Category(models.Model):
     
 
 class Product(models.Model):
-    productId =  models.IntegerField(primary_key=True,auto_created=True)
+    
     userId = models.ForeignKey(UserModel,on_delete = models.CASCADE)
     
     categoryId = models.ForeignKey(Category,on_delete = models.CASCADE)
