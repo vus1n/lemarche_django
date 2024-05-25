@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'lemarche.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lemarche-db',
+        'NAME': 'verceldb',
         'USER': "default",
         'PASSWORD': "h0vc5MyRGDnO",
         'HOST': "ep-proud-night-a409g60i-pooler.us-east-1.aws.neon.tech",
