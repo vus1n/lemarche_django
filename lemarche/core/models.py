@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-import uuid
+
 
 class UserModel(models.Model):
     
@@ -9,6 +9,7 @@ class UserModel(models.Model):
     pic = models.TextField(max_length=200, null =True, blank =True)
     contactNo = models.IntegerField()
     location = models.TextField(max_length=200, null =True, blank =True)
+    address = models.JSONField(blank=True,null=True)
     def __str__(self):
         return self.name
 
