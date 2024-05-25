@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'lemarche.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'verceldb',
         'USER': "default",
         'PASSWORD': "h0vc5MyRGDnO",
