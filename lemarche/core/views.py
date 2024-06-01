@@ -61,7 +61,7 @@ def create_list_myads(request,id):
 @api_view(['GET','PUT'])
 def retrieve_update_acc(request,id):
     if request.method == 'GET':
-        user = UserModel.objects.get(name=id)
+        user = UserModel.objects.get(email=id)
         user_serializer = UserModelSerializer(user)
         return Response({"data":user_serializer.data})
     elif request.method == 'PUT':
