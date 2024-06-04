@@ -30,7 +30,7 @@ def list_categories(request):
 
 @api_view(['GET'])
 def list_liked_products(request,id):
-    user = UserModel.objects.get(name=id)
+    user = UserModel.objects.get(email=id)
     liked_products = Product.objects.filter(liked_by=user)
     data = ProductSerializer(liked_products,many=True)
     return Response({"data":data.data})
@@ -39,19 +39,21 @@ def list_liked_products(request,id):
 
 @api_view(['GET','POST'])
 def create_list_myads(request,id):
-    user  = UserModel.objects.get(name=id)
+    user  = UserModel.objects.get(email=id)
     if request.method == 'GET':
-        products = Product.objects.filter(userId = user.userId)
+        products = Product.objects.filter(userId = user)
         data = ProductSerializer(products,many=True)
         return Response({"data":data.data})
     elif request.method == 'POST':
+        
         category = request.data['category']
         category_model = Category.objects.get(categoryName = category)
         title = request.data['title']
         brand = request.data['brand']
-        imgUrl = request.data['img']
+        description = request.data['description']
+        imgUrl = request.data['imgUrl']
         price = request.data['price']
-        ad = Product.objects.create(userId=user,categoryId=category_model,title=title,brand=brand,imgUrl=imgUrl,price=price)
+        ad = Product.objects.create(userId=user,categoryId=category_model,title=title,brand=brand,description=description,imgUrl=imgUrl,price=price)
         ad.save()
         ad_data = ProductSerializer(ad)
         return Response(ad_data.data)
@@ -61,9 +63,17 @@ def create_list_myads(request,id):
 @api_view(['GET','PUT'])
 def retrieve_update_acc(request,id):
     if request.method == 'GET':
-        user = UserModel.objects.get(email=id)
-        user_serializer = UserModelSerializer(user)
-        return Response({"data":user_serializer.data})
+        try:
+            user = UserModel.objects.get(email=id)
+            user_serializer = UserModelSerializer(user)
+            return Response({"data":user_serializer.data})
+        except UserModel.DoesNotExist:
+            user = UserModel.objects.create(email=id,name='new user',contactNo=000000)
+            user.save()
+            user_serializer = UserModelSerializer(user)
+            return Response({"data":user_serializer.data})
+
+
     elif request.method == 'PUT':
         name = request.data['name']
         email = request.data['email']
