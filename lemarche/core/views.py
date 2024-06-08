@@ -60,27 +60,34 @@ def create_list_myads(request,id):
 
 
 
-@api_view(['GET','PUT'])
-def retrieve_update_acc(request,id):
+@api_view(['GET', 'PUT'])
+def retrieve_update_acc(request, id):
     if request.method == 'GET':
         try:
             user = UserModel.objects.get(email=id)
             user_serializer = UserModelSerializer(user)
-            return Response({"data":user_serializer.data})
+            return Response({"data": user_serializer.data})
         except UserModel.DoesNotExist:
-            user = UserModel.objects.create(email=id,name='new user',contactNo=000000)
+            user = UserModel.objects.create(email=id, name='new user', contactNo=000000)
             user.save()
             user_serializer = UserModelSerializer(user)
-            return Response({"data":user_serializer.data})
-
+            return Response({"data": user_serializer.data})
 
     elif request.method == 'PUT':
-        name = request.data['name']
-        email = request.data['email']
-        pic = request.data['pic']
-        contactNo = request.data['contact']
-        location = request.data['location']
-        user_model = UserModel.objects.update(name=name,email=email,pic=pic,contactNo=contactNo,location=location)
-       
-        user_serializer = UserModelSerializer(user_model)
-        return Response(user_serializer.data)
+        try:
+            user = UserModel.objects.get(email=id)
+        except UserModel.DoesNotExist:
+            return Response({"error": "User not found."})
+
+        data = {
+            'name': request.data.get('name'),
+            'email': request.data.get('email'),
+            'pic': request.data.get('pic'),
+            'contactNo': request.data.get('contact'),
+            'location': request.data.get('location')
+        }
+        user_serializer = UserModelSerializer(user, data=data, partial=True)
+        if user_serializer.is_valid():
+            user_serializer.save()
+            return Response(user_serializer.data)
+        return Response(user_serializer.errors)
