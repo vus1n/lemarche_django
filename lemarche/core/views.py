@@ -28,6 +28,24 @@ def list_categories(request):
     categorys_serializer = CategorySerializer(categorys,many=True)
     return Response({"data":categorys_serializer.data})
 
+@api_view(['POST'])
+def like_retrive_products(request,usr,prod):
+    
+    user_model = UserModel.objects.get(email = usr)
+    product = Product.objects.get(id=prod)
+   
+    if user_model in product.liked_by.all():
+        product.liked_by.remove(user_model)
+    else:
+        product.liked_by.add(user_model)
+    product.save()
+    prod_serializer = ProductSerializer(product)
+    return Response({'data':prod_serializer.data})
+    
+
+
+
+
 @api_view(['GET'])
 def list_liked_products(request,id):
     user = UserModel.objects.get(email=id)
