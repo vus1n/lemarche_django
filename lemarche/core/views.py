@@ -4,10 +4,10 @@ from .models import Category,Product,UserModel
 from .serializers import CategorySerializer,ProductSerializer,UserModelSerializer
 
 @api_view(['GET'])
-def list_products(request,id):
+def list_products(request,id,campus):
     if id != 'All':
         category = Category.objects.get(categoryName=id)
-        products = Product.objects.filter(categoryId=category.categoryId)
+        products = Product.objects.filter(categoryId=category)
         
     else:
         products = Product.objects.all()
@@ -30,7 +30,7 @@ def list_categories(request):
 
 @api_view(['POST'])
 def like_retrive_products(request,usr,prod):
-    
+
     user_model = UserModel.objects.get(email = usr)
     product = Product.objects.get(id=prod)
    
