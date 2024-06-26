@@ -107,10 +107,17 @@ def retrieve_update_acc(request, id):
             'email': request.data.get('email'),
             'pic': request.data.get('pic'),
             'contactNo': request.data.get('contact'),
-            'location': request.data.get('location')
+            'location': request.data.get('location'),
+            'campus':request.data.get('campus'),
         }
         user_serializer = UserModelSerializer(user, data=data, partial=True)
         if user_serializer.is_valid():
             user_serializer.save()
             return Response(user_serializer.data)
         return Response(user_serializer.errors)
+    
+@api_view(['GET'])
+def list_campuses(request):
+    campuses = Campus.objects.all()
+    campus_serializer = CampusSerializer(campuses,many=True)
+    return Response({"data":campus_serializer.data})
