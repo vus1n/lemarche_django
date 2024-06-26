@@ -14,7 +14,7 @@ class UserModel(models.Model):
     name =models.CharField(max_length = 50)
     pic = models.TextField(max_length=200, null =True, blank =True)
     contactNo = models.IntegerField()
-    # campus = models.ForeignKey(Campus,on_delete=models.CASCADE, default=1)
+    campus = models.ForeignKey(Campus,on_delete=models.CASCADE, default=1)
     location = models.TextField(max_length=200, null =True, blank =True)
     address = models.JSONField(blank=True,null=True)
     def __str__(self):
