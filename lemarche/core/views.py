@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import Category,Product,UserModel
-from .serializers import CategorySerializer,ProductSerializer,UserModelSerializer
+from .models import Category,Product,UserModel,Campus
+from .serializers import CategorySerializer,ProductSerializer,UserModelSerializer,CampusSerializer
 
 @api_view(['GET'])
 def list_products(request,id,campus):
@@ -84,7 +84,12 @@ def retrieve_update_acc(request, id):
         try:
             user = UserModel.objects.get(email=id)
             user_serializer = UserModelSerializer(user)
-            return Response({"data": user_serializer.data})
+            
+            campus_serializer = CampusSerializer(user.campus)
+            data ={
+                **user_serializer.data,"campusName":campus_serializer.data['campusName']
+            }
+            return Response({"data": data})
         except UserModel.DoesNotExist:
             user = UserModel.objects.create(email=id, name='new user', contactNo=000000)
             user.save()
