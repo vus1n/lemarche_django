@@ -7,10 +7,10 @@ from .serializers import CategorySerializer,ProductSerializer,UserModelSerialize
 def list_products(request,id,campus):
     if id != 'All':
         category = Category.objects.get(categoryName=id)
-        products = Product.objects.filter(categoryId=category)
+        products = Product.objects.filter(categoryId=category,campus=campus)
         
     else:
-        products = Product.objects.all()
+        products = Product.objects.all(campus = campus)
     
     user = [product.userId for product in products]
 

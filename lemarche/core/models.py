@@ -39,6 +39,7 @@ class Product(models.Model):
     status = models.BooleanField(default = True)
     imgUrl = models.TextField(max_length=200, null =True, blank =True)
     liked_by = models.ManyToManyField(UserModel,related_name="liked_by", blank=True)
+    campus = models.ForeignKey(Campus,on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return self.title
