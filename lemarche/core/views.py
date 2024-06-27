@@ -5,12 +5,13 @@ from .serializers import CategorySerializer,ProductSerializer,UserModelSerialize
 
 @api_view(['GET'])
 def list_products(request,id,campus):
+    campusData = Campus.objects.get(id = campus)
     if id != 'All':
         category = Category.objects.get(categoryName=id)
-        products = Product.objects.filter(categoryId=category,campus=campus)
+        products = Product.objects.filter(categoryId=category,campus=campusData)
         
     else:
-        products = Product.objects.all(campus = campus)
+        products = Product.objects.filter(campus = campusData)
     
     user = [product.userId for product in products]
 
@@ -71,7 +72,8 @@ def create_list_myads(request,id):
         description = request.data['description']
         imgUrl = request.data['imgUrl']
         price = request.data['price']
-        ad = Product.objects.create(userId=user,categoryId=category_model,title=title,brand=brand,description=description,imgUrl=imgUrl,price=price)
+        campus = user.campus
+        ad = Product.objects.create(userId=user,categoryId=category_model,title=title,brand=brand,description=description,imgUrl=imgUrl,price=price,campus=campus)
         ad.save()
         ad_data = ProductSerializer(ad)
         return Response(ad_data.data)
