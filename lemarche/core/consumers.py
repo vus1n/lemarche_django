@@ -4,12 +4,14 @@ from asgiref.sync import sync_to_async
 from .models import Room,UserModel,Message
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.user1 = self.scope['url_route']['kwargs']['user1']
         self.user2 =self.scope['url_route']['kwargs']['user2']
+        self.room_name = f"{self.user1}-{self.user2}"
+        
         self.room_group_name = f'chat_{self.room_name}'
-        #self.user = await self.get_user(self.scope['url_route']['kwargs']['id'])
+        
         self.room = await self.get_or_create_room(self.user1,self.user2)
+
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
