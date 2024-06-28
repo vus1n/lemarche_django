@@ -25,12 +25,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'room_name': self.room_name
         }))
 
-        messages = await self.get_previous_messages()
-        for message in messages:
-            await self.send(text_data=json.dumps({
-                'message': message.message,
-                'user': message.user
-            }))
+        # messages = await self.get_previous_messages()
+        # for message in messages:
+        #     await self.send(text_data=json.dumps({
+        #         'message': message.message,
+        #         'user': message.user
+        #     }))
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
             self.room_group_name,
@@ -66,9 +66,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def save_message(self, message):
         return Message.objects.create(message=message, room=self.room)
 
-    @sync_to_async
-    def get_previous_messages(self):
-        return Message.objects.filter(room=self.room).order_by('id')
+    # @sync_to_async
+    # def get_previous_messages(self):
+    #     return Message.objects.filter(room=self.room).order_by('id')
 
     @sync_to_async
     def get_or_create_room(self, user1, user2):
