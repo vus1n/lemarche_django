@@ -14,7 +14,7 @@ def list_products(request,id,campus,key):
         products = products.filter(categoryId=category)
         
     else:
-        if key != "null":
+        if key == "null":
             pass
         else:
             products = products.filter(
