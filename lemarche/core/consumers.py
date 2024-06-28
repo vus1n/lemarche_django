@@ -11,6 +11,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = f'chat_{self.room_name}'
         
         self.room = await self.get_or_create_room(self.user1,self.user2)
+        print(f"User1: {self.user1}, User2: {self.user2}, Room: {self.room_name}")
 
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -36,6 +37,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+        print(f"Disconnected with code: {close_code}")
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
