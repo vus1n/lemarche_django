@@ -2,16 +2,28 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import Category,Product,UserModel,Campus
 from .serializers import CategorySerializer,ProductSerializer,UserModelSerializer,CampusSerializer
+from django.db.models import Q
 
 @api_view(['GET'])
-def list_products(request,id,campus):
+def list_products(request,id,campus,key):
     campusData = Campus.objects.get(id = campus)
+    products = Product.objects.filter(campus = campusData)
+
     if id != 'All':
         category = Category.objects.get(categoryName=id)
-        products = Product.objects.filter(categoryId=category,campus=campusData)
+        products = products.filter(categoryId=category)
         
     else:
-        products = Product.objects.filter(campus = campusData)
+        if key != "null":
+            pass
+        else:
+            products = products.filter(
+            Q(title__icontains=key) | 
+            # Q(category__icontains=keyword) |
+            Q(brand__icontains=key)
+            )
+
+        
     
     user = [product.userId for product in products]
 
@@ -123,3 +135,18 @@ def list_campuses(request):
     campuses = Campus.objects.all()
     campus_serializer = CampusSerializer(campuses,many=True)
     return Response({"data":campus_serializer.data})
+
+# @api_view(['GET'])
+# def product_search(request,key):
+   
+#     products = Product.objects.all()
+    
+    
+#     keyword = key
+#     if keyword:
+        
+#     products_serializer = ProductSerializer(products,many=True)
+#     if products:
+#         return Response({'data':products_serializer.data})
+#     else:
+#         return Response({'data':"null"})
