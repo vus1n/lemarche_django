@@ -1,6 +1,8 @@
 import os
 import django
-
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
+from django.core.asgi import get_asgi_application
 
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lemarche.settings")
@@ -8,9 +10,7 @@ print(f'DJANGO_SETTINGS_MODULE: {os.environ.get("DJANGO_SETTINGS_MODULE")}')
 django.setup()
 
 import core.routing
-from channels.auth import AuthMiddlewareStack
-from channels.routing import ProtocolTypeRouter, URLRouter
-from django.core.asgi import get_asgi_application
+
 
 application = ProtocolTypeRouter(
     {
