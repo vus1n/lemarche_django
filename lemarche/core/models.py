@@ -48,7 +48,12 @@ class Product(models.Model):
 class Room(models.Model):
     user1 = models.ForeignKey(UserModel, null=True, on_delete=models.CASCADE, related_name='user1')
     user2 = models.ForeignKey(UserModel, null=True, on_delete=models.CASCADE, related_name='user2')
-    room_name = models.CharField(unique=True, default = f"{user1.name}-{user2.name}")
+    room_name = models.CharField()
+    def save(self, *args, **kwargs):
+        if not self.room_name:
+            self.room_name = f"{self.user1.id}-{self.user2.id}"
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.room_name
     
