@@ -34,7 +34,9 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    
     'daphne',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,9 +46,10 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'core',
-    'channels',
+    
      
 ]
+ASGI_APPLICATION = "lemarche.asgi.application"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,7 +86,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'lemarche.wsgi.application'
-ASGI_APPLICATION = "lemarche.asgi.application"
+
 
 CHANNEL_LAYERS = {
     'default': {
