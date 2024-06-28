@@ -1,11 +1,15 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-
+from asgiref.sync import sync_to_async
+from .models import Room,UserModel,Message
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.user1 = self.scope['url_route']['kwargs']['user1']
+        self.user2 =self.scope['url_route']['kwargs']['user2']
         self.room_group_name = f'chat_{self.room_name}'
-
+        #self.user = await self.get_user(self.scope['url_route']['kwargs']['id'])
+        self.room = await self.get_or_create_room(self.user1,self.user2)
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
@@ -13,6 +17,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
+        messages = await self.get_previous_messages()
+        for message in messages:
+            await self.send(text_data=json.dumps({
+                'message': message.message,
+                'user': message.user
+            }))
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
             self.room_group_name,
@@ -22,18 +32,43 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
+        user = text_data_json['user']
+        await self.save_message(message)
 
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': message
+                'message': message,
+                'user': user
             }
         )
 
     async def chat_message(self, event):
         message = event['message']
+        user = event['user']
 
         await self.send(text_data=json.dumps({
-            'message': message
+            'message': message,
+            'user':user
         }))
+
+
+    @sync_to_async
+    def save_message(self, message):
+        return Message.objects.create(message=message, room=self.room)
+
+    @sync_to_async
+    def get_previous_messages(self):
+        return Message.objects.filter(room=self.room).order_by('id')
+
+    @sync_to_async
+    def get_or_create_room(self, user1, user2):
+        user1 = UserModel.objects.get(id=user1)
+        user2 = UserModel.objects.get(id=user2)
+        room, created = Room.objects.get_or_create(user1=user1, user2=user2)
+        return room
+    
+    @sync_to_async
+    def get_user(self, id):
+        return UserModel.objects.get(id = id)
