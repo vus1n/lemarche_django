@@ -18,6 +18,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
         await self.accept()
+        await self.send(text_data=json.dumps({
+            'message': 'Connection established',
+            'user1': self.user1,
+            'user2': self.user2,
+            'room_name': self.room_name
+        }))
 
         messages = await self.get_previous_messages()
         for message in messages:
