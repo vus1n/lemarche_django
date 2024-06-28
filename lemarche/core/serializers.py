@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Product,Category,UserModel,Campus
+from .models import Product,Category,UserModel,Campus,Message,Room
 
 class ProductSerializer(ModelSerializer):
     class Meta:
@@ -20,4 +20,14 @@ class UserModelSerializer(ModelSerializer):
 class CampusSerializer(ModelSerializer):
     class Meta:
         model = Campus
+        fields ='__all__'
+
+class RoomSerializer(ModelSerializer):
+    class Meta:
+        model = Room
+        fields ='__all__'
+
+class MessageSerializer(ModelSerializer):
+    class Meta:
+        model = Message
         fields ='__all__'

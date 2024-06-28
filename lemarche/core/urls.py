@@ -9,5 +9,5 @@ urlpatterns = [
     path('user/<str:id>/',views.retrieve_update_acc),
     path('user/<str:usr>/prod/<str:prod>/like/',views.like_retrive_products),
     path('list_campuses/',views.list_campuses),
-    # path('products/<str:key>/',views.product_search),
+    path('user/<str:id>/rooms/',views.list_rooms),
 ]

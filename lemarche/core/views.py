@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import Category,Product,UserModel,Campus
-from .serializers import CategorySerializer,ProductSerializer,UserModelSerializer,CampusSerializer
+from .models import Category,Product,UserModel,Campus,Room,Message
+from .serializers import CategorySerializer,ProductSerializer,UserModelSerializer,CampusSerializer,RoomSerializer,MessageSerializer
 from django.db.models import Q
 
 @api_view(['GET'])
@@ -136,17 +136,15 @@ def list_campuses(request):
     campus_serializer = CampusSerializer(campuses,many=True)
     return Response({"data":campus_serializer.data})
 
-# @api_view(['GET'])
-# def product_search(request,key):
+@api_view(['GET'])
+def list_rooms(request,id):
+    user = UserModel.objects.get(id=id)
+    rooms = Room.objects.filter(
+        Q(user1__email=user.email) |
+        Q(user2__email = user.email)
+    )
+
+    rooms_serializer = RoomSerializer(rooms,many=True)
+    return Response({'data':rooms_serializer.data})
    
-#     products = Product.objects.all()
-    
-    
-#     keyword = key
-#     if keyword:
-        
-#     products_serializer = ProductSerializer(products,many=True)
-#     if products:
-#         return Response({'data':products_serializer.data})
-#     else:
-#         return Response({'data':"null"})
+
