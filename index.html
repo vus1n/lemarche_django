@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>WebSocket Test</h1>
+    <div id="status"></div>
+    <div id="messages"></div>
+
+    <script>
+        const socket = new WebSocket('ws://127.0.0.1:8000/ws/chat/1/2/'); // Replace with your actual WebSocket URL
+
+        socket.onopen = () => {
+            document.getElementById('status').textContent = 'WebSocket connection established!';
+        };
+
+        socket.onmessage = (event) => {
+            const messageData = JSON.parse(event.data);
+            const messageElement = document.createElement('p');
+            messageElement.textContent = `Received: ${messageData.message}`;
+            document.getElementById('messages').appendChild(messageElement);
+        };
+
+        socket.onclose = (event) => {
+            if (event.wasClean) {
+                document.getElementById('status').textContent = 'WebSocket connection closed cleanly.';
+            } else {
+                document.getElementById('status').textContent = 'WebSocket connection closed unexpectedly.';
+            }
+        };
+
+        socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+    </script>
+</body>
+</html>
